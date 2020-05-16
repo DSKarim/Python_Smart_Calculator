@@ -1,0 +1,64 @@
+# smart calculator project
+
+num_dict = dict()
+while True:
+    result = 0
+    numbers = input()
+    # User commands management
+    if '/' in numbers and len(numbers.split()) < 2:
+        if '/exit' in numbers:
+            print('Bye!')
+            break
+        elif '/help' in numbers:
+            print('The program calculates the sum and subs of numbers')
+        else:
+            print('Unknown command')
+    elif numbers == '':
+        continue
+    # Variables usage management
+    elif '=' in numbers:
+        if numbers.count('=') > 1:
+            print('Invalid assignment')
+            continue
+        numbers = numbers.replace('=', ' ')
+        numbers = numbers.split()
+        if not(numbers[0].isalpha()):
+            print('Invalid identifier')
+        else:
+            if numbers[1] in num_dict:
+                num_dict[numbers[0]] = num_dict[numbers[1]]
+            else:
+                if numbers[1].isnumeric():
+                    num_dict[numbers[0]] = numbers[1]
+                else:
+                    print('Invalid assignment')
+    else:
+        # Calculation and errors handling
+        numbers = numbers.replace('+', ' + ')
+        numbers = numbers.replace('-', ' - ')
+        numbers = numbers.replace('*', ' * ')
+        numbers = numbers.replace('/', ' / ')
+        spl_numbers = numbers.split()
+
+        for x, y in num_dict.items():
+            for z in range(len(spl_numbers)):
+                if x == spl_numbers[z]:
+                    spl_numbers[z] = y
+        numbers = ''.join(spl_numbers)
+        try:
+            result = eval(numbers)
+            if (result - int(result)) == 0:
+                print(int(result))
+            else:
+                print(result)
+        except SyntaxError:
+            print('Invalid expression')
+            continue
+        except NameError:
+            if len(spl_numbers) < 2 and not(spl_numbers[0].isalpha()):
+                print('Invalid identifier')
+            elif len(spl_numbers) < 2:
+                print('Unknown variable')
+            else:
+                print('Invalid expression')
+            continue
